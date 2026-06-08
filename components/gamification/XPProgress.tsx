@@ -24,7 +24,7 @@ export default function XPProgress() {
           />
 
           <span className="text-sm font-medium text-white">
-            Bunz Level
+            Bunz Level 🥕
           </span>
         </div>
 

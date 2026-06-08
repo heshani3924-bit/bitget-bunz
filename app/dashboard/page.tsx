@@ -59,7 +59,7 @@ export default function DashboardPage() {
       {/* Welcome */}
       <motion.div variants={item}>
         <h1 className="text-3xl font-bold">
-          🐰 Bitget Bunz
+          🥕 Bitget Bunz
         </h1>
 
         <p className="mt-2 text-zinc-400">

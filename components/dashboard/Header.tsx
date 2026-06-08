@@ -1,8 +1,10 @@
 "use client";
 
 import { Bell, TrendingUp } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Header() {
+const userName = useAuthStore((state) => state.username);
   return (
     <header className="sticky top-0 z-50 border-b border-cyan-500/10 bg-zinc-950/70 backdrop-blur-xl">
       <div className="flex h-20 items-center justify-between px-6">
@@ -66,7 +68,7 @@ export default function Header() {
 
             <div className="hidden md:block">
               <p className="text-sm font-semibold text-white">
-                Heshi
+                {userName || "Guest"}
               </p>
 
               <p className="text-xs text-cyan-400">

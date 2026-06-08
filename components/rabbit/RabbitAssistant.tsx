@@ -43,54 +43,50 @@ export default function RabbitAssistant() {
     },
   ]);
 
-  const handleSend = () => {
+const handleSend = async () => {
+    console.log("HandleSend is working...");
     if (!input.trim()) return;
 
-    // XP System
+    // XP and Badge logic
     addXP(5);
-
-    // Badge unlock (first chat)
-    addBadge({
-      id: "first-chat",
-      name: "First Chat",
-      icon: "🥕",
-    });
-
-    // XP popup
+    addBadge({ id: "first-chat", name: "First Chat", icon: "🥕" });
     setShowXP(true);
-    setTimeout(() => {
-      setShowXP(false);
-    }, 2000);
+    setTimeout(() => setShowXP(false), 2000);
 
-    const userMessage: Message = {
-      id: Date.now(),
-      role: "user",
-      content: input,
-    };
-
+    const userMessage: Message = { id: Date.now(), role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
-
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
+      });
+
+      const data = await response.json();
+
       const rabbitMessage: Message = {
         id: Date.now() + 1,
         role: "rabbit",
-        content:
-          "🐰 Market analysis complete. BTC momentum remains positive.",
+        content: data.reply,
       };
 
       setMessages((prev) => [...prev, rabbitMessage]);
-      setIsTyping(false);
 
       // Achievement Toast
       setShowAchievement(true);
-
-      setTimeout(() => {
-        setShowAchievement(false);
-      }, 3500);
-    }, 1800);
+      setTimeout(() => setShowAchievement(false), 3500);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now(), role: "rabbit", content: "❌ Something went wrong." },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
 const handleAnalyzeMarket = async () => {
